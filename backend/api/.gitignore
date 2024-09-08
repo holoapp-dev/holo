@@ -1,0 +1,17 @@
+/target
+
+/.docker
+.env
+
+/.idea
+/.vscode
+
+.DS_Store
+Thumbs.db
+
+api/Cargo.lock
+api/target
+migration/Cargo.lock
+migration/target
+orm/Cargo.lock
+org/target
