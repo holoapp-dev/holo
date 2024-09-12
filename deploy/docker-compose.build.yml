@@ -1,0 +1,7 @@
+name: holo
+
+services:
+  server:
+    build:
+      context: ../api
+      target: final
