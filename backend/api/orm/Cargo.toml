@@ -1,7 +1,0 @@
-[package]
-name = "orm"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-sea-orm = { version = "1.0", features = ["sqlx-postgres", "runtime-tokio", "with-json", "macros"] }
