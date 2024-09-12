@@ -1,6 +1,8 @@
+name: holo
+
 services:
   database:
-    image: 'postgres:latest'
+    image: "postgres:latest"
     ports:
       - ${POSTGRES_PORT}:5432
     env_file:
@@ -8,7 +10,7 @@ services:
     networks:
       - postgres-network
     volumes:
-      - ${DOCKER_DIRECTORY}/db-data/:/var/lib/postgresql/data/
+      - postgres:/var/lib/postgresql/data/
 
   pgadmin:
     image: dpage/pgadmin4
@@ -21,12 +23,12 @@ services:
     networks:
       - postgres-network
     volumes:
-      - ${DOCKER_DIRECTORY}/pgadmin-data/:/var/lib/pgadmin/
+      - pgadmin:/var/lib/pgadmin/
 
   minio:
     image: minio/minio
     volumes:
-      -  ${DOCKER_DIRECTORY}/minio-data/:/data
+      - minio:/data
     ports:
       - "${MINIO_ADMIN_PORT}:9090"
       - "${MINIO_PORT}:9000"
@@ -35,6 +37,21 @@ services:
     restart: unless-stopped
     command: server /data --console-address ":9090"
 
+  # rust build
+  # server:
+  #   build:
+  #     context: .
+  #     target: final
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - 8080:8080
+
 networks:
   postgres-network:
     driver: bridge
+
+volumes:
+  minio:
+  pgadmin:
+  postgres:

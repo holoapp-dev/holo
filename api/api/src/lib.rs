@@ -11,7 +11,7 @@ struct AppState {
 
 #[actix_web::main]
 async fn start() -> std::io::Result<()> {
-    dotenv().expect(".env file is not present");
+    dotenv().ok(); //подправил потому что в докере они и так доступны будут
 
     let conn = Database::connect(env::var("DATABASE_URL").expect("DATABASE_URL is not set in .env file")).await.unwrap();
     let state = AppState { conn };
