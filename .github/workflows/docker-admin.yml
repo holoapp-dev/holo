@@ -9,7 +9,7 @@ on:
   schedule:
     - cron: "41 13 * * *"
   push:
-    branches: ["release/api/**"]
+    branches: ["release/admin/**"]
     # Publish semver tags as releases.
     tags: ["v*.*.*"]
   pull_request:
@@ -73,9 +73,9 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
-          context: ./api
+          context: ./admin
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ghcr.io/holoapp-dev/holo:api
+          tags: ghcr.io/holoapp-dev/holo:admin
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
