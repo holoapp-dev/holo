@@ -8,7 +8,7 @@ Create `.env` file from `.env.example` and fill it with your environment variabl
 Run `docker-compose.yml` to set up PostgreSQL:
 
 ```bash
-docker compose up -d
+docker compose -f docker-compose.development.yml up -d
 ```
 
 Then install `lld` linker.
