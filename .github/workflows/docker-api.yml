@@ -75,7 +75,7 @@ jobs:
         with:
           context: ./api
           push: ${{ github.event_name != 'pull_request' }}
-          tags: api:latest
+          tags: user/app:latest
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
