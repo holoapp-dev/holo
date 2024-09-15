@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXContainerItemProxy section */
@@ -30,21 +30,9 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		2C0890832C961285007D0D11 /* iOS */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = iOS;
-			sourceTree = "<group>";
-		};
-		2C0890942C961286007D0D11 /* iOSTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = iOSTests;
-			sourceTree = "<group>";
-		};
-		2C08909E2C961286007D0D11 /* iOSUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = iOSUITests;
-			sourceTree = "<group>";
-		};
+		2C0890832C961285007D0D11 /* iOS */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = iOS; sourceTree = "<group>"; };
+		2C0890942C961286007D0D11 /* iOSTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = iOSTests; sourceTree = "<group>"; };
+		2C08909E2C961286007D0D11 /* iOSUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = iOSUITests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +175,7 @@
 				};
 			};
 			buildConfigurationList = 2C08907C2C961285007D0D11 /* Build configuration list for PBXProject "iOS" */;
+			compatibilityVersion = "Xcode 15.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -195,7 +184,6 @@
 			);
 			mainGroup = 2C0890782C961285007D0D11;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
 			productRefGroup = 2C0890822C961285007D0D11 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -396,6 +384,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"iOS/Preview Content\"";
+				DEVELOPMENT_TEAM = G8L68SH32U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -407,7 +396,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = holoapp.dev.iOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -424,6 +413,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"iOS/Preview Content\"";
+				DEVELOPMENT_TEAM = G8L68SH32U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -435,7 +425,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = holoapp.dev.iOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
