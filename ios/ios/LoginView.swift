@@ -13,6 +13,7 @@ struct LoginView: View {
     @State private var password: String = ""
     @State private var loginMessage: String = ""
     @State private var isLoggedIn: Bool = false
+    @State private var isRegistering: Bool = false
     @State private var userList: UserList? = nil
     
     var body: some View {
@@ -23,9 +24,6 @@ struct LoginView: View {
                     .bold()
                     .fontWeight(.heavy)
                     .padding(EdgeInsets(top: 0,leading: 0, bottom: 75, trailing: 0))
-                Text("Login")
-                    .font(.title)
-                    .bold()
                 
                 TextField("Username", text: $username)
                     .padding()
@@ -62,6 +60,30 @@ struct LoginView: View {
                         EmptyView()
                     }
                 )
+                Button(action: {
+                    isRegistering = true
+                }) {
+                    Text("Register")
+                        .bold()
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+                .padding(.top, 10)
+                
+                NavigationLink(
+                    destination: RegistrationView(){
+                        isRegistering = false
+                    },
+                    isActive: $isRegistering,
+                    label: {
+                        EmptyView()
+                    }
+                )
+                
+                
             }
             .padding()
             .onAppear(perform: loadUsers)
@@ -70,19 +92,28 @@ struct LoginView: View {
     
     // MARK: - Load Users from JSON File
     func loadUsers() {
-        if let url = Bundle.main.url(forResource: "users", withExtension: "json") {
-            do {
-                let data = try Data(contentsOf: url)
-                let decoder = JSONDecoder()
-                userList = try decoder.decode(UserList.self, from: data)
-                print("Users loaded successfully.")
-            } catch {
-                print("Error loading or decoding JSON: \(error)")
+            let fileURL = getUserJSONFilePath()
+            
+            if FileManager.default.fileExists(atPath: fileURL.path) {
+                do {
+                    let data = try Data(contentsOf: fileURL)
+                    let decoder = JSONDecoder()
+                    userList = try decoder.decode(UserList.self, from: data)
+                } catch {
+                    print("Error loading users from file: \(error)")
+                }
+            } else if let url = Bundle.main.url(forResource: "users", withExtension: "json") {
+                do {
+                    let data = try Data(contentsOf: url)
+                    let decoder = JSONDecoder()
+                    userList = try decoder.decode(UserList.self, from: data)
+                } catch {
+                    print("Error loading users from bundle: \(error)")
+                }
+            } else {
+                print("JSON file not found.")
             }
-        } else {
-            print("JSON file not found.")
         }
-    }
 
     // MARK: - Login Logic
     func handleLogin() {
