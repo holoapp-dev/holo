@@ -7,8 +7,8 @@
 
 import SwiftUI
 import Foundation
+import CryptoKit
 
-// Helper function to get the URL of the users.json file in the Documents Directory
 func getDocumentsDirectory() -> URL {
     let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
     return paths[0]
@@ -18,7 +18,12 @@ func getUserJSONFilePath() -> URL {
     return getDocumentsDirectory().appendingPathComponent("users.json")
 }
 
-// Function to save user data back to the Documents Directory
+func hashPassword(_ password: String) -> String {
+    let inputData = Data(password.utf8)
+    let hashed = SHA256.hash(data: inputData)
+    return hashed.compactMap { String(format: "%02x", $0) }.joined()
+}
+
 func saveUsersToFile(_ userList: UserList) {
     let fileURL = getUserJSONFilePath()
 
@@ -32,7 +37,6 @@ func saveUsersToFile(_ userList: UserList) {
     }
 }
 
-// Define User model matching JSON structure
 struct RegistrationView: View {
     
     @State private var username: String = ""
@@ -41,7 +45,7 @@ struct RegistrationView: View {
     @State private var registrationMessage: String = ""
     
     var onRegisterSuccess: () -> Void
-    @State private var userList: UserList? = nil // Holds decoded user data
+    @State private var userList: UserList? = nil
     
     var body: some View {
         VStack(spacing: 20) {
@@ -49,26 +53,22 @@ struct RegistrationView: View {
                 .font(.largeTitle)
                 .bold()
             
-            // Username field
             TextField("Username", text: $username)
                 .padding()
                 .background(Color(.secondarySystemBackground))
                 .cornerRadius(10)
                 .autocapitalization(.none)
             
-            // Password field
             SecureField("Password", text: $password)
                 .padding()
                 .background(Color(.secondarySystemBackground))
                 .cornerRadius(10)
             
-            // Confirm Password field
             SecureField("Confirm Password", text: $confirmPassword)
                 .padding()
                 .background(Color(.secondarySystemBackground))
                 .cornerRadius(10)
             
-            // Register button
             Button(action: {
                 handleRegister()
             }) {
@@ -82,20 +82,18 @@ struct RegistrationView: View {
             }
             .padding(.top, 20)
             
-            // Show registration message if needed
             Text(registrationMessage)
                 .foregroundColor(.red)
                 .padding(.top, 10)
         }
         .padding()
-        .onAppear(perform: loadUsers) // Load existing users when view appears
+        .onAppear(perform: loadUsers)
     }
     
     // MARK: - Load Users from JSON File
     func loadUsers() {
         let fileURL = getUserJSONFilePath()
         
-        // Try to load users from the Documents Directory first
         if FileManager.default.fileExists(atPath: fileURL.path) {
             do {
                 let data = try Data(contentsOf: fileURL)
@@ -105,7 +103,6 @@ struct RegistrationView: View {
                 print("Error loading or decoding users from file: \(error)")
             }
         } else if let url = Bundle.main.url(forResource: "users", withExtension: "json") {
-            // If the file doesn't exist, load it from the bundle (read-only)
             do {
                 let data = try Data(contentsOf: url)
                 let decoder = JSONDecoder()
@@ -120,38 +117,36 @@ struct RegistrationView: View {
     
     // MARK: - Handle Registration Logic
     func handleRegister() {
-            guard var users = userList?.users else {
-                registrationMessage = "Error loading users."
-                return
-            }
-            
-            // Check if username is already taken
-            if users.contains(where: { $0.username == username }) {
-                registrationMessage = "Username is already taken."
-                return
-            }
-            
-            // Check if passwords match
-            if password != confirmPassword {
-                registrationMessage = "Passwords do not match."
-                return
-            }
-            
-            // Add the new user to the mutable copy of users
-            let newUser = User(username: username, password: password)
-            users.append(newUser) // Now this works as `users` is mutable
-            
-            // Update the userList with the modified users array
-            userList?.users = users
-            
-            // Save the updated users to file
-            if let updatedUserList = userList {
-                saveUsersToFile(updatedUserList)
-            }
-            
-            registrationMessage = "Registration successful!"
-            onRegisterSuccess() // Call the callback to return to login
+        guard var users = userList?.users else {
+            registrationMessage = "Error loading users."
+            return
         }
+        
+        if users.contains(where: { $0.username == username }) {
+            registrationMessage = "Username is already taken."
+            return
+        }
+        
+
+        if password != confirmPassword {
+            registrationMessage = "Passwords do not match."
+            return
+        }
+        
+        let hashedPassword = hashPassword(password)
+    
+        let newUser = User(username: username, password: hashedPassword)
+        users.append(newUser)
+        
+        userList?.users = users
+        
+        if let updatedUserList = userList {
+            saveUsersToFile(updatedUserList)
+        }
+        
+        registrationMessage = "Registration successful!"
+        onRegisterSuccess()
+    }
 }
 
 struct RegistrationView_Previews: PreviewProvider {

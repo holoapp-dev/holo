@@ -10,7 +10,6 @@ struct User: Codable {
     let password: String
 }
 
-// Define UserList that holds an array of users
 struct UserList: Codable {
-    var users: [User] // Make this mutable by using `var`
+    var users: [User]
 }

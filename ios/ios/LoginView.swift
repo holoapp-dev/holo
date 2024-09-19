@@ -115,15 +115,17 @@ struct LoginView: View {
             }
         }
 
-    // MARK: - Login Logic
+    // MARK: - Handle Login Logic
     func handleLogin() {
         guard let users = userList?.users else {
             loginMessage = "No users available."
             return
         }
+
+        let hashedPassword = hashPassword(password)
         
-        if let matchingUser = users.first(where: { $0.username == username && $0.password == password }) {
-            print("Logged in as \(matchingUser.username)")
+        // Check if a user exists with the provided username and hashed password
+        if let matchingUser = users.first(where: { $0.username == username && $0.password == hashedPassword }) {
             loginMessage = ""
             isLoggedIn = true
         } else {
