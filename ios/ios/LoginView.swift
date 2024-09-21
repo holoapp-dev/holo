@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct LoginView: View {
     
     @State private var username: String = ""
@@ -15,6 +16,8 @@ struct LoginView: View {
     @State private var isLoggedIn: Bool = false
     @State private var isRegistering: Bool = false
     @State private var userList: UserList? = nil
+    
+    @EnvironmentObject var userSession: UserSession
     
     var body: some View {
         NavigationView {
@@ -116,6 +119,7 @@ struct LoginView: View {
         }
 
     // MARK: - Handle Login Logic
+
     func handleLogin() {
         guard let users = userList?.users else {
             loginMessage = "No users available."
@@ -124,10 +128,10 @@ struct LoginView: View {
 
         let hashedPassword = hashPassword(password)
         
-        // Check if a user exists with the provided username and hashed password
-        if let matchingUser = users.first(where: { $0.username == username && $0.password == hashedPassword }) {
+        if users.first(where: { $0.username == username && $0.password == hashedPassword }) != nil {
             loginMessage = ""
             isLoggedIn = true
+            userSession.userTaker(username: username, password: password)
         } else {
             loginMessage = "Invalid username or password."
         }

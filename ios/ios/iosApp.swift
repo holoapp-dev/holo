@@ -1,9 +1,16 @@
 import SwiftUI
+
 @main
-struct ChecklistApp: App {
+struct MyApp: App {
+    @StateObject private var themeManager = ThemeManager()
+    @StateObject private var userSession = UserSession()
+    
     var body: some Scene {
         WindowGroup {
             LoginView()
+                .environmentObject(themeManager)
+                .environmentObject(userSession)
+                .preferredColorScheme(themeManager.isDarkMode ? .dark : .light)
         }
     }
 }
@@ -11,3 +18,4 @@ struct ChecklistApp: App {
 #Preview {
     
 }
+

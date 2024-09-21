@@ -8,23 +8,49 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @EnvironmentObject var themeManager: ThemeManager
+    @EnvironmentObject var userSession: UserSession
+    
     var body: some View {
-        VStack{
-            Menu {
-                Button("White") {
-                    print("White")
-                }
-                Button("Black"){
-                    print("Black")
-                }
-            }
-        label: {
-                Text("Themes")
+        VStack {
+            Text("Settings")
+                .font(.largeTitle)
+                .bold()
                 .padding()
-                .background(Color.blue)
-                .foregroundColor(.white)
-                .cornerRadius(10)
+                
+            if let currentUser = userSession.currentUser {
+                Text("Welcome, \(currentUser.username)!")
+                    .font(.headline)
+                    .padding(.top, 20)
+            } else {
+                Text("User not logged in!")
+                    .font(.headline)
+                    .padding(.top, 20)
             }
+                
+            Toggle(isOn: $themeManager.isDarkMode) {
+                Text("Dark mode")
+                    .font(.headline)
+            }
+            .padding()
+            
+            Spacer()
+
+            VStack {
+                Text("Follow us on")
+                    .font(.subheadline)
+                
+                HStack(spacing: 20) {
+                    Link(destination: URL(string: "https://github.com/holoapp-dev")!) {
+                        Image(systemName: "link.circle.fill")
+                            .font(.largeTitle)
+                            .foregroundColor(.blue)
+                    }
+                }
+            }
+            .padding(.bottom, 50)
         }
+        .navigationTitle("Settings")
+        .padding()
     }
 }

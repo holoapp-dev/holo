@@ -7,6 +7,7 @@ internal struct Task: Identifiable {
 }
 
 struct ContentView: View {
+    
     var body: some View {
         TabView {
             ChecklistView()
