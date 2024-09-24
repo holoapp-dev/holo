@@ -7,30 +7,86 @@
 
 import SwiftUI
 
+struct Product: Identifiable {
+    let id = UUID()
+    var name: String
+    var isChecked: Bool = false
+}
+
 struct ChecklistView: View {
-    @State private var tasks: [Task] = [
-        Task(title: "Task 1", isCompleted: false),
-        Task(title: "Task 2", isCompleted: false),
-        Task(title: "Task 3", isCompleted: false)
+    @State private var products: [Product] = [
+        Product(name: "Apple"),
+        Product(name: "Milk"),
+        Product(name: "Bread")
     ]
+    
+
+    @State private var newProductName: String = ""
     
     var body: some View {
         NavigationView {
-            List {
-                ForEach($tasks) { $task in
-                    HStack {
-                        Text(task.title)
-                        Spacer()
-                        Button(action: {
-                            task.isCompleted.toggle()
-                        }) {
-                            Image(systemName: task.isCompleted ? "checkmark.square" : "square")
-                        }
-                        .buttonStyle(PlainButtonStyle())
+            VStack {
+                HStack {
+                    TextField("Add new product", text: $newProductName)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding()
+                    
+                    Button(action: {
+                        addNewProduct()
+                    }) {
+                        Image(systemName: "plus")
+                            .padding()
+                            .background(Circle().fill(Color.blue))
+                            .foregroundColor(.white)
                     }
+                    .disabled(newProductName.isEmpty)
                 }
+                
+                List {
+                    ForEach($products) { $product in
+                        HStack {
+                            Button(action: {
+                                product.isChecked.toggle()
+                            }) {
+                                Image(systemName: product.isChecked ? "checkmark.square" : "square")
+                                    .foregroundColor(product.isChecked ? .green : .gray)
+                            }
+                            
+                            if #available(iOS 16.0, *) {
+                                TextField("Product name", text: $product.name)
+                                    .strikethrough(product.isChecked)
+                                    .foregroundColor(product.isChecked ? .gray : .black)
+                            } else {
+                            }
+                        }
+                    }
+                    .onDelete(perform: deleteProduct)
+                    .onMove(perform: moveProduct)
+                }
+                .navigationBarTitle("Products")
+                .navigationBarItems(
+                    leading: EditButton(),
+                    trailing: Button(action: {
+                        addNewProduct()
+                    }) {
+                        Image(systemName: "plus")
+                    }
+                )
             }
-            .navigationTitle("Checklist")
         }
+    }
+    
+    private func addNewProduct() {
+        let newProduct = Product(name: newProductName)
+        products.append(newProduct)
+        newProductName = ""
+    }
+    
+    private func deleteProduct(at offsets: IndexSet) {
+        products.remove(atOffsets: offsets)
+    }
+    
+    private func moveProduct(from source: IndexSet, to destination: Int) {
+        products.move(fromOffsets: source, toOffset: destination)
     }
 }

@@ -2,7 +2,7 @@
 //  jsonReader.swift
 //  ios
 //
-//  Created by Yan on 19.09.2024.
+//  Created by Yan on 17.09.2024.
 //
 
 struct User: Codable {
