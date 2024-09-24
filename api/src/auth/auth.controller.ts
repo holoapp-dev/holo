@@ -11,7 +11,12 @@ import {
 import { SignInDto } from './dto/signIn.dto';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -20,6 +25,11 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    example:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsInVzZXJuYW1lIjoic3RyaW5nIiwiaWF0IjoxNzI3MTg5ODY5LCJleHAiOjE3Mjk3ODE4Njl9.TqvSSdzE9YCFownWUH38hcPgYcuEF1ztv4Wyt7nO_iI',
+  })
   signIn(@Body() signInDto: SignInDto) {
     return this.authService.signIn(signInDto);
   }
@@ -27,7 +37,16 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Get('current')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'get current user' })
+  @ApiOperation({ summary: 'get current user jwt info' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    example: {
+      sub: 2,
+      username: 'string',
+      iat: 1727189794,
+      exp: 1729781794,
+    },
+  })
   getCurrentAuth(@Request() req: any) {
     return req.user;
   }

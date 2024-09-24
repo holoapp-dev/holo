@@ -13,10 +13,13 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(
+    createUserDto: CreateUserDto,
+  ): Promise<Omit<User, 'passwordHash'> | undefined> {
+    let user;
+
     try {
-      // noinspection UnnecessaryLocalVariableJS
-      const user = await this.prisma.user.create({
+      user = await this.prisma.user.create({
         data: {
           username: createUserDto.username,
           passwordHash: await this.hashPassword(createUserDto.password),
@@ -27,8 +30,6 @@ export class UsersService {
           passwordHash: true,
         },
       });
-
-      return user;
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
@@ -40,6 +41,8 @@ export class UsersService {
         );
       }
     }
+
+    return user;
   }
 
   async findOneWithPasswordHash(username: string): Promise<User | null> {
