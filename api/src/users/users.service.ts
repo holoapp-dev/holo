@@ -2,12 +2,14 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/createUser.dto';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { UpdateUserDto } from './dto/updateUser.dto';
 
 @Injectable()
 export class UsersService {
@@ -45,13 +47,67 @@ export class UsersService {
     return user;
   }
 
+  async update(
+    userJwt: any,
+    updateUserDto: UpdateUserDto,
+  ): Promise<Omit<User, 'passwordHash'>> {
+    if (!userJwt) {
+      throw new UnauthorizedException();
+    }
+
+    const passwordHash = updateUserDto.password
+      ? await this.hashPassword(updateUserDto.password)
+      : undefined;
+    const emailExists =
+      updateUserDto.email &&
+      (await this.prisma.user.findFirst({
+        where: { email: updateUserDto.email },
+      }));
+    const usernameExists =
+      updateUserDto.username &&
+      (await this.prisma.user.findFirst({
+        where: { username: updateUserDto.username },
+      }));
+
+    if (usernameExists) {
+      throw new BadRequestException('username is already in use');
+    }
+
+    if (emailExists) {
+      throw new BadRequestException('email is already in use');
+    }
+
+    return this.prisma.user.update({
+      where: { id: userJwt.sub },
+      data: {
+        username: updateUserDto.username,
+        passwordHash,
+        email: updateUserDto.email,
+      },
+      omit: {
+        passwordHash: true,
+      },
+    });
+  }
+
+  async delete(userJwt: any): Promise<Omit<User, 'passwordHash'>> {
+    if (!userJwt) {
+      throw new UnauthorizedException();
+    }
+
+    return this.prisma.user.delete({
+      where: { id: userJwt.sub },
+      omit: { passwordHash: true },
+    });
+  }
+
   async findOneWithPasswordHash(username: string): Promise<User | null> {
     return this.prisma.user.findUnique({ where: { username } });
   }
 
-  async findOne(username: string): Promise<Omit<User, 'passwordHash'> | null> {
+  async findOne(id: number): Promise<Omit<User, 'passwordHash'> | null> {
     return this.prisma.user.findUnique({
-      where: { username },
+      where: { id },
       omit: { passwordHash: true },
     });
   }

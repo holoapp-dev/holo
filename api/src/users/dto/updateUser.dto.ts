@@ -10,8 +10,10 @@ import {
 export class UpdateUserDto {
   @ApiProperty({
     title: 'Username',
+    required: false,
     description: 'can contain only alphanumeric characters',
   })
+  @IsOptional()
   @IsNotEmpty()
   @IsAlphanumeric()
   username?: string;
@@ -30,5 +32,7 @@ export class UpdateUserDto {
     title: 'Password',
     required: false,
   })
+  @IsOptional()
+  @IsNotEmpty()
   password?: string;
 }
