@@ -27,7 +27,7 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Get('current')
   @ApiBearerAuth()
-  @ApiOperation({summary: "get current user"})
+  @ApiOperation({ summary: 'get current user' })
   getCurrentAuth(@Request() req: any) {
     return req.user;
   }

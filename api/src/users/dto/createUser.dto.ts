@@ -1,11 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { IsAlphanumeric, IsNotEmpty } from 'class-validator';
 
-export class SignInDto {
+export class CreateUserDto {
   @ApiProperty({
     title: 'Username',
+    description: 'can contain only alphanumeric characters',
   })
   @IsNotEmpty()
+  @IsAlphanumeric()
   username: string;
 
   @ApiProperty({
@@ -13,10 +15,4 @@ export class SignInDto {
   })
   @IsNotEmpty()
   password: string;
-
-  @ApiProperty({
-    title: 'Remember me',
-  })
-  @IsNotEmpty()
-  rememberMe: boolean;
 }

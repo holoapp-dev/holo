@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
@@ -24,14 +28,16 @@ export class UsersService {
         },
       });
 
-      return user
+      return user;
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
-          throw new BadRequestException('username already taken')
+          throw new BadRequestException('username already taken');
         }
       } else {
-        throw new InternalServerErrorException('unknown error while adding user to db')
+        throw new InternalServerErrorException(
+          'unknown error while adding user to db',
+        );
       }
     }
   }
