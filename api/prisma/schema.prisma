@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
 }
 
 datasource db {
@@ -10,17 +11,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Roles {
+model Role {
   id   Int    @id @default(autoincrement())
   name String
   User User[]
 }
 
 model User {
-  id           Int    @id @default(autoincrement())
-  username     String @unique
-  email        String @unique
+  id           Int     @id @default(autoincrement())
+  username     String  @unique
+  email        String? @unique
   passwordHash String
-  role         Roles  @relation(fields: [rolesId], references: [id])
-  rolesId      Int
+  role         Role    @relation(fields: [roleId], references: [id])
+  roleId       Int
 }
