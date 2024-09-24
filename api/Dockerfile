@@ -5,7 +5,7 @@ COPY package.json ./
 COPY yarn.lock ./
 COPY prisma ./
 
-RUN yarn install --production
+RUN yarn install --production --frozen-lockfile
 
 COPY . .
 
@@ -21,7 +21,6 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/tsconfig.json ./tsconfig.json
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/yarn.lock ./
