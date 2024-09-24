@@ -1,23 +1,24 @@
 FROM node:22 AS builder
-# Create app directory
 WORKDIR /app
 
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
 COPY package.json ./
 COPY yarn.lock ./
 COPY prisma ./
 
-# Install app dependencies
-RUN yarn install
+RUN yarn install --production
 
 COPY . .
 
 RUN npx prisma generate
 RUN yarn build
+RUN yarn autoclean --force
 
-FROM node:22
+
+
+FROM node:22-alpine
 
 WORKDIR /app
+ENV NODE_ENV=production
 
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/tsconfig.json ./tsconfig.json
