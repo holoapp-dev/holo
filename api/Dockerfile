@@ -5,15 +5,12 @@ COPY package.json ./
 COPY yarn.lock ./
 COPY prisma ./
 
-RUN yarn install --production --frozen-lockfile
+RUN yarn install --frozen-lockfile
 
 COPY . .
 
 RUN npx prisma generate
 RUN yarn build
-RUN yarn autoclean --force
-
-
 
 FROM node:22-alpine
 
