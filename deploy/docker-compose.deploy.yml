@@ -38,7 +38,7 @@ services:
     command: server /data --console-address ":9090"
 
   api:
-    image: ghcr.io/holoapp-dev/holo:main
+    image: ghcr.io/holoapp-dev/holo:api
     env_file:
       - .env
     ports:
