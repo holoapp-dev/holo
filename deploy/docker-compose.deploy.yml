@@ -39,6 +39,8 @@ services:
 
   api:
     image: ghcr.io/holoapp-dev/holo:api
+    networks:
+      - postgres-network
     env_file:
       - .env
     ports:
