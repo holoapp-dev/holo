@@ -4,7 +4,7 @@
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["omitApi"]
-  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -13,16 +13,39 @@ datasource db {
 }
 
 model Role {
-  id   Int    @id @default(autoincrement())
-  name String
-  User User[]
+  id    Int    @id @default(autoincrement())
+  name  String
+  users User[]
 }
 
 model User {
-  id           Int     @id @default(autoincrement())
-  username     String  @unique
-  email        String? @unique
+  id           Int           @id @default(autoincrement())
+  username     String        @unique
+  email        String?       @unique
   passwordHash String
-  role         Role    @relation(fields: [roleId], references: [id])
+  role         Role          @relation(fields: [roleId], references: [id])
   roleId       Int
+  families     FamilyUsers[]
+}
+
+model Family {
+  id    Int           @id @default(autoincrement())
+  name  String
+  users FamilyUsers[]
+}
+
+enum FamilyRole {
+  admin
+  memeber
+}
+
+model FamilyUsers {
+  user     User       @relation(fields: [userId], references: [id])
+  family   Family     @relation(fields: [familyId], references: [id])
+  userId   Int
+  familyId Int
+  role     FamilyRole
+
+  @@id([userId, familyId])
+  @@unique([userId, familyId])
 }
