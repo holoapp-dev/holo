@@ -37,16 +37,6 @@ services:
     restart: unless-stopped
     command: server /data --console-address ":9090"
 
-  # rust build
-  # server:
-  #   build:
-  #     context: .
-  #     target: final
-  #   env_file:
-  #     - .env
-  #   ports:
-  #     - 8080:8080
-
 networks:
   postgres-network:
     driver: bridge
