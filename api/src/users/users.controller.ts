@@ -25,7 +25,7 @@ import { UpdateUserDto } from './dto/updateUser.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get('crud')
+  @Get('me')
   @ApiOperation({ summary: 'get currently authorized user' })
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
@@ -42,7 +42,7 @@ export class UsersController {
     return this.usersService.findOne(req.user.sub);
   }
 
-  @Patch('crud')
+  @Patch('me')
   @ApiOperation({ summary: 'update currently authorized user' })
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
@@ -62,7 +62,7 @@ export class UsersController {
     return this.usersService.update(req?.user, updateUserDto);
   }
 
-  @Delete('crud')
+  @Delete('me')
   @ApiOperation({ summary: 'delete currently authorized user' })
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
@@ -88,7 +88,7 @@ export class UsersController {
       roleId: 2,
     },
   })
-  @Post('crud')
+  @Post()
   @ApiOperation({ summary: 'creates a new user' })
   async create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
