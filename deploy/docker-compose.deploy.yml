@@ -38,11 +38,13 @@ services:
     command: server /data --console-address ":9090"
 
   api:
-    image: ghcr.io/holoapp-dev/holo:main
+    image: kriper0nind/holo:api
+    networks:
+      - postgres-network
     env_file:
       - .env
     ports:
-      - 8080:8080
+      - 3000:3000
 
 networks:
   postgres-network:

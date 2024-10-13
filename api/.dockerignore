@@ -4,7 +4,6 @@
 # For more help, visit the .dockerignore file reference guide at
 # https://docs.docker.com/go/build-context-dockerignore/
 
-**/.DS_Store
 **/.classpath
 **/.dockerignore
 **/.env
@@ -15,6 +14,8 @@
 **/.toolstarget
 **/.vs
 **/.vscode
+**/.next
+**/.cache
 **/*.*proj.user
 **/*.dbmdl
 **/*.jfm
@@ -24,9 +25,13 @@
 **/Dockerfile*
 **/node_modules
 **/npm-debug.log
+**/obj
 **/secrets.dev.yaml
 **/values.dev.yaml
-/bin
-/target
+**/build
+**/dist
 LICENSE
 README.md
+
+.env*
+!.env.vault
